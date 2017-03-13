@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Data Viewer</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/styles/bootstrap.min.css">
+
+		<!-- stylesheet -->
+		<link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/styles/style.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+		<!-- <header class="header">
+			<nav class="navbar navbar-custom" role="navigation">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#custom-collapse">
+							<span class="sr-only">Toggle Navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#home">Visualizer</a>
+					</div>
+
+					<div class="collapse navbar-collapse" id="custom-collapse">
+						<ul class="nav navbar-nav navbar-right">
+							<li><a href="#aboutus">About</a></li>
+							<li><a href="#programs">Programs</a></li>
+							<li><a href="#meetus">Staff</a></li>
+							<li><a href="#testimonials">Stories</a></li>
+							<li><a href="#contact">Contact</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</header> -->
+
+		<div id="wrapper">
+			<div id="sidebar-wrapper">
+				<ul class="sidebar-nav">
+					<li class="sidebar-brand"><span class="fa fa-wrench"></span> TOOLS</li>
+					<li class="line"></li>
+					<li class="option"><span class="fa fa-area-chart"></span> Signal</li>
+					<li class="option"><span class="fa fa-gears"></span> FFT</li>
+				</ul>
+			</div>
+			<div id="page-content-wrapper">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-4 col-sm-6">
+							<div id="maxValue" class="stat-block view-animate">
+								<div class="trace">1</div>
+								<div class="heading">
+									<span class="fa fa-microchip"></span><span class="text"> Peak Voltage</span>
+								</div>
+								<div class="stat">
+									5 V
+								</div>
+								<div class="trend">
+									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6">
+							<div id="minValue" class="stat-block view-animate">
+								<div class="trace">1</div>
+								<div class="heading">
+									<span class="fa fa-microchip"></span><span class="text"> Min. Voltage</span>
+								</div>
+								<div class="stat">
+									5 V
+								</div>
+								<div class="trend">
+									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6">
+							<div id="avgValue" class="stat-block view-animate">
+								<div class="trace">1</div>
+								<div class="heading">
+									<span class="fa fa-microchip"></span><span class="text"> Avg. Voltage</span>
+								</div>
+								<div class="stat">
+									5 V
+								</div>
+								<div class="trend">
+									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6">
+							<div id="maxValue2" class="stat-block view-animate">
+								<div class="trace">2</div>
+								<div class="heading">
+									<span class="fa fa-microchip"></span><span class="text"> Peak Voltage</span>
+								</div>
+								<div class="stat">
+									5 V
+								</div>
+								<div class="trend">
+									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6">
+							<div id="minValue2" class="stat-block view-animate">
+								<div class="trace">2</div>
+								<div class="heading">
+									<span class="fa fa-microchip"></span><span class="text"> Min. Voltage</span>
+								</div>
+								<div class="stat">
+									5 V
+								</div>
+								<div class="trend">
+									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6">
+							<div id="avgValue2" class="stat-block view-animate">
+								<div class="trace">2</div>
+								<div class="heading">
+									<span class="fa fa-microchip"></span><span class="text"> Avg. Voltage</span>
+								</div>
+								<div class="stat">
+									5 V
+								</div>
+								<div class="trend">
+									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="block block-light">
+								<canvas id="signal" width="1000" height="300"></canvas>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="block block-light">
+								<canvas id="fft" width="1000" height="300"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- <section class="block block-light">
+					<canvas id="signal" width="1000" height="300"></canvas>
+				</section>
+				<section class="block block-light">
+					<canvas id="fft" width="1000" height="300"></canvas>
+				</section> -->
+			</div>
+		</div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="/scripts/bootstrap.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="/scripts/Chart.min.js"></script>
+		<script src="https://use.fontawesome.com/fab590fe69.js"></script>
+		<script src="/scripts/client.js"></script>
+  </body>
+</html>
