@@ -7,26 +7,19 @@ var port = 8000;
 // for serial port handling
 var serialport = require('serialport');
 var SerialPort = serialport.SerialPort;
-var serialPort = new SerialPort('/dev/ttyS0', {
-	baudrate: 9600,
+var serialPort = new SerialPort('/dev/ttyS1', {
+	baudrate: 115200,
 	parser: serialport.parsers.readline('\n')
 });
 
 // for data collection
-var sample_size = 256;
+var sampling_rate = 4500 // in Hz
+var sample_size = 256;//256;
 var serial_data = [new Array(sample_size), new Array(sample_size)];
-var out_data = [create_signal(), create_signal()];
-out_data[0].signal = new Array(sample_size).fill(0);
-out_data[1].signal = new Array(sample_size).fill(0);
+var out_data = [new Array(sample_size), new Array(sample_size)];
+var fft_data = [new Array(sample_size), new Array(sample_size)];
 var channel = 0;
 var serial_index = 0;
-
-// for fft
-var FFT = require('fft.js')
-var fft = new FFT(sample_size);
-var fft_out = [create_signal(), create_signal()]
-fft_out[0].signal = fft.createComplexArray();
-fft_out[1].signal = fft.createComplexArray();
 
 //routing
 app.get('/', function(req, res) {
@@ -48,25 +41,21 @@ io.on('connection', function(socket) {
 	// });
 
 	socket.on('update_data', function() {
-		update_signal(out_data[0], gen_random_sine(sample_size, 10));
-		update_signal(out_data[1], gen_random_sine(sample_size, 10));
+		out_data[0] = gen_random_sine(sample_size, 10);
+		out_data[1] = gen_random_sine(sample_size, 10);
 
-		fft.realTransform(fft_out[0].signal, out_data[0].signal);
-		fft.realTransform(fft_out[1].signal, out_data[1].signal);
+		get_signal_info(out_data[0], function(ch1_data) {
+			get_signal_info(out_data[1], function(ch2_data) {
+				io.sockets.emit('signal', [JSON.parse(ch1_data), JSON.parse(ch2_data)]);
 
-		update_signal(fft_out[0], fft_out[0].signal);
-		update_signal(fft_out[1], fft_out[1].signal);
-
-		console.log('Data sent');
-
-		io.sockets.emit('signal', {
-			signal: out_data,
-			fft: fft_out
+				console.log('Data sent');
+			});
 		});
 	});
 });
 
-var gen_random_sine = function(size, timescale) {
+// generate test data
+var gen_random_sine = function(size) {
 	arr = new Array(size);
 
 	var phi = Math.random();
@@ -74,83 +63,54 @@ var gen_random_sine = function(size, timescale) {
 	var num_add = Math.floor(4 * Math.random()) + 1;
 
 	for (var i=0; i<size; i++) {
-		var t = (i/size) * timescale;
+		var t = (i/sampling_rate);
 
 		var val = 0;
 		for (var j=1; j<=num_add; j++) {
 			val += a * Math.sin(j*t + phi) * Math.max(Math.random(), 0.2);
 		}
-		arr[i] = val;
+		// arr[i] = val;
+		arr[i] = Math.sin(400 * Math.PI * i/sampling_rate);
+		// arr[i] = Math.sign(arr[i]);
 	}
 
 	return arr;
 };
 
-// function to generate signal object
-function create_signal() {
-	return {
-		signal: [],
-		min: 0,
-		max: 0,
-		avg: 0,
-		p_min: 0,
-		p_max: 0,
-		p_avg: 0,
-		d_min: 0,
-		d_max: 0,
-		d_avg: 0
-	}
-}
-
-function update_signal(signal, data) {
-	signal.signal = data;
-	signal.p_min = signal.min;
-	signal.p_max = signal.max;
-	signal.p_avg = signal.avg;
-	signal.min = arrayMin(data);
-	signal.max = arrayMax(data);
-	signal.avg = arrayAvg(data);
-	signal.d_min = (signal.min - signal.p_min) / signal.p_min * 100;
-	signal.d_max = (signal.max - signal.p_max) / signal.p_max * 100;
-	signal.d_avg = (signal.avg - signal.p_avg) / signal.p_avg * 100;
-}
-
 
 // read serial port data
 serialPort.on('open', function() {
+	console.log('Open connection');
 	serialPort.on('data', function(data) {
 		console.log(data);
 
-		serial_data[channel][serial_index] = data;
-
-		channel = channel == 0 ? 1 : 0;
-
-		if (serial_index <= sample_size) {
-			serial_index++;
-		} else {
-			out_data = serial_data;
-			serial_index = 0;
-		}
+		// serial_data[channel][serial_index] = data;
+		//
+		// channel = channel == 0 ? 1 : 0;
+		//
+		// if (serial_index <= sample_size) {
+		// 	serial_index++;
+		// } else {
+		// 	out_data = serial_data;
+		// 	serial_index = 0;
+		// }
 
 	});
 });
 
+// calculate signal and fft stats
+function get_signal_info(data, callback) {
+	var spawn = require('child_process').spawn;
+	var py = spawn('python', ['signal_stat.py',
+		'[' + data.toString() + ']',
+		sampling_rate.toString()]);
+	var py_data = '';
 
-// Min and max calculations
-function arrayMin(arr) {
-  return arr.reduce(function (p, v) {
-    return ( p < v ? p : v );
-  });
-}
+	py.stdout.on('data', function(chunk) {
+		py_data += chunk.toString('utf8');
+	});
 
-function arrayMax(arr) {
-  return arr.reduce(function (p, v) {
-    return ( p > v ? p : v );
-  });
-}
-
-function arrayAvg(arr) {
-	return arr.reduce(function (p, v) {
-		return p + v;
-	})/arr.length;
+	py.stdout.on('end', function() {
+		callback(py_data);
+	});
 }

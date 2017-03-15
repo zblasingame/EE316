@@ -4,13 +4,16 @@
   "description": "Serial communication display",
   "dependencies": {
     "chart.js": "^2.5.0",
+    "chartjs-plugin-zoom": "^0.4.5",
     "express": "^4.15.2",
     "socket.io": "^1.7.3"
   },
   "devDependencies": {
+    "chart.js-scatter": "^1.1.4",
     "eslint": "^3.17.1",
     "eslint-config-google": "^0.7.1",
     "fft.js": "^4.0.1",
-    "serialport": "^4.0.7"
+    "serialport": "^4.0.7",
+    "smooth-scroll": "github:cferdinandi/smooth-scroll"
   }
 }

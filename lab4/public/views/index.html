@@ -19,48 +19,31 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+		<!-- MathJax -->
+		<script type="text/javascript" async
+			src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+		</script>
   </head>
   <body>
-
-		<!-- <header class="header">
-			<nav class="navbar navbar-custom" role="navigation">
-				<div class="container">
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#custom-collapse">
-							<span class="sr-only">Toggle Navigation</span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-						</button>
-						<a class="navbar-brand" href="#home">Visualizer</a>
-					</div>
-
-					<div class="collapse navbar-collapse" id="custom-collapse">
-						<ul class="nav navbar-nav navbar-right">
-							<li><a href="#aboutus">About</a></li>
-							<li><a href="#programs">Programs</a></li>
-							<li><a href="#meetus">Staff</a></li>
-							<li><a href="#testimonials">Stories</a></li>
-							<li><a href="#contact">Contact</a></li>
-						</ul>
-					</div>
-				</div>
-			</nav>
-		</header> -->
 
 		<div id="wrapper">
 			<div id="sidebar-wrapper">
 				<ul class="sidebar-nav">
-					<li class="sidebar-brand"><span class="fa fa-wrench"></span> TOOLS</li>
+					<a data-scroll href="#stat1"><li class="sidebar-brand">HOME</li></a>
 					<li class="line"></li>
-					<li class="option"><span class="fa fa-area-chart"></span> Signal</li>
-					<li class="option"><span class="fa fa-gears"></span> FFT</li>
+					<!-- <li class="option"><span class="fa fa-area-chart"></span> \(x(t)\) Signal</li> -->
+					<a data-scroll href="#signal1"><li class="option">\(x_1(t),\; x_2(t)\)</li></a>
+					<a data-scroll href="#fft-mag1"><li class="option">\(|X_1(j\omega)|,\; |X_2(j\omega)|\)</li></a>
+					<a data-scroll href="#fft-phase1"><li class="option">\(\angle X_1(j\omega),\; \angle X_2(j\omega)\)</li></a>
 				</ul>
 			</div>
+
 			<div id="page-content-wrapper">
+				<!-- stats -->
 				<div class="container-fluid">
-					<div class="row">
-						<div class="col-md-4 col-sm-6">
+					<div id="stat1" class="row">
+						<div class="col-lg-4 col-md-6">
 							<div id="maxValue" class="stat-block view-animate">
 								<div class="trace">1</div>
 								<div class="heading">
@@ -74,7 +57,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-6">
+						<div class="col-lg-4 col-md-6">
 							<div id="minValue" class="stat-block view-animate">
 								<div class="trace">1</div>
 								<div class="heading">
@@ -88,7 +71,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-6">
+						<div class="col-lg-4 col-md-6">
 							<div id="avgValue" class="stat-block view-animate">
 								<div class="trace">1</div>
 								<div class="heading">
@@ -102,7 +85,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-6">
+						<div class="col-lg-4 col-md-6">
 							<div id="maxValue2" class="stat-block view-animate">
 								<div class="trace">2</div>
 								<div class="heading">
@@ -116,7 +99,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-6">
+						<div class="col-lg-4 col-md-6">
 							<div id="minValue2" class="stat-block view-animate">
 								<div class="trace">2</div>
 								<div class="heading">
@@ -130,7 +113,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4 col-sm-6">
+						<div class="col-lg-4 col-md-6">
 							<div id="avgValue2" class="stat-block view-animate">
 								<div class="trace">2</div>
 								<div class="heading">
@@ -146,26 +129,52 @@
 						</div>
 					</div>
 				</div>
+
+				<!-- graphs -->
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-md-6">
 							<div class="block block-light">
-								<canvas id="signal" width="1000" height="300"></canvas>
+								<span class="chart-title">\(x_1(t)\)</span>
+								<canvas id="signal1" width="400" height="300"></canvas>
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="block block-light">
-								<canvas id="fft" width="1000" height="300"></canvas>
+								<span class="chart-title">\(x_2(t)\)</span>
+								<canvas id="signal2" width="400" height="300"></canvas>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="block block-light">
+								<span class="chart-title">\(|X_1(j\omega)|\)</span>
+								<canvas id="fft-mag1" width="400" height="300"></canvas>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="block block-light">
+								<span class="chart-title">\(|X_2(j\omega)|\)</span>
+								<canvas id="fft-mag2" width="400" height="300"></canvas>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="block block-light">
+								<span class="chart-title">\(\angle X_1(j\omega)\)</span>
+								<canvas id="fft-phase1" width="400" height="300"></canvas>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="block block-light">
+								<span class="chart-title">\(\angle X_2(j\omega)\)</span>
+								<canvas id="fft-phase2" width="400" height="300"></canvas>
 							</div>
 						</div>
 					</div>
 				</div>
-				<!-- <section class="block block-light">
-					<canvas id="signal" width="1000" height="300"></canvas>
-				</section>
-				<section class="block block-light">
-					<canvas id="fft" width="1000" height="300"></canvas>
-				</section> -->
 			</div>
 		</div>
 
@@ -175,6 +184,8 @@
 		<script src="/scripts/bootstrap.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/scripts/Chart.min.js"></script>
+		<script src="/scripts/chartjs-plugin-zoom.min.js"></script>
+		<script src="/scripts/smooth-scroll.min.js"></script>
 		<script src="https://use.fontawesome.com/fab590fe69.js"></script>
 		<script src="/scripts/client.js"></script>
   </body>

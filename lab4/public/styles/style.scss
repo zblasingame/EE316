@@ -49,6 +49,16 @@ html, body {
   padding: 0;
 }
 
+.sidebar-nav a {
+	color: $font-dark;
+}
+
+a:active,
+a:hover,
+a:link {
+	text-decoration: none;
+}
+
 .sidebar-nav .line {
 	background-color: $font-dark;
 	width: 100%;
@@ -100,64 +110,13 @@ html, body {
 
 }
 
-// Navbar
-// a {
-// 	color: $blue;
-// }
-//
-// .header {
-// 	border-bottom: 1px solid $bg-dark;
-// 	background-color: #ffffff;
-// 	position: relative;
-// 	width: 100%;
-// 	z-index: 98;
-// }
-//
-// .navbar-custom {
-// 	border: 0;
-// 	border-radius: 0;
-// 	margin: 0;
-// 	text-transform: uppercase;
-// 	font-family: Raleway, sans-serif;
-// }
-//
-// .navbar-brand {
-// 	font-weight: 500;
-// }
-//
-// .navbar-brand:hover,
-// .navbar-brand:focus {
-// 	background-color: $blue;
-// 	outline: 0;
-// 	color: $font-dark;
-// }
-//
-// .navbar-custom .navbar-nav > li > a {
-// 	font-size: 11px;
-// 	font-weight: bolder;
-// 	letter-spacing: 3px;
-// }
-//
-// .navbar-custom .nav li.active,
-// .navbar-custom .nav li a:hover,
-// .navbar-custom .nav li a:focus,
-// .navbar-custom .navbar-nav > li.active a {
-// 	background-color: $blue;
-// 	outline: 0;
-// 	color: $font-dark;
-// }
-//
-// .navbar-custom .navbar-toggle .icon-bar {
-// 	background-color: $blue;
-// }
-
 // Statisitcs
 .stat-block {
 	background-color: $bg-01;
 	visibility: hidden;
 	padding: 10px;
 	padding-left: 15%;
-	margin: 20px;
+	margin-bottom: 20px;
 	opacity: 0;
 }
 
@@ -211,8 +170,10 @@ html, body {
 
 // Block styling
 .block {
-	padding: 120px 0 100px;
-	margin: 0 20px 20px 20px;
+	padding: 0;
+	// margin: 0 1px 1px 1px;
+	margin: 10px;
+	text-align: center;
 }
 
 .block-light {
@@ -227,4 +188,10 @@ html, body {
 	text-align: center;
 	margin: 0 0 20px;
 	font-family: Raleway, sans-serif;
+}
+
+// for chart
+.chart-title {
+	font-size: 24px;
+	color: $font-light;
 }

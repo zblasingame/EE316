@@ -6,6 +6,12 @@
 		// function to initialize chart
 		var init_chart = function(ctx, options) {
 			var datasets = [];
+			var coords = [];
+
+			for (var j=0; j<options.sample_size; j++) {
+				coords.push({x: j, y: i });
+			}
+
 			for (var i=0; i<options.labels.length; i++) {
 				datasets.push({
 					label: options.labels[i],
@@ -22,7 +28,7 @@
 					pointRadius: 1,
 					pointHitRadius: 10,
 					fill: false,
-					data: []
+					data: coords
 				});
 			}
 
@@ -32,45 +38,110 @@
 					labels: new Array(options.sample_size),
 					datasets: datasets
 				},
-				options: {}
+				options: {
+					pan: {
+						enabled: true,
+						mode: 'x'
+					},
+					zoom: {
+						enabled: true,
+						mode: 'x'
+					},
+					title: {
+						display: false,
+						text: options.title,
+						fontFamily: 'Raleway',
+						fontSize: 24
+					},
+					scales: {
+						xAxes: [{
+							type: options.scale_type,
+							position: 'bottom'
+						}]
+					}
+				}
 			});
 		};
 
 		// create charts
 		var sample_size = 0;
-		var signal_chart = null;
-		var fft_chart = null;
+		var signal_charts = [];
+		var mag_charts = [];
+		var phase_charts = [];
 
 		socket.on('sample_size', function(size) {
-			signal_chart = init_chart($('#signal'), {
-				labels: ['Signal 1', 'Signal 2'],
-				colors: ['#16a085', '#2980b9'],
-				backgroundColors: ['#16a085', '#2980b9'],
-				sample_size: size
-			});
+			signal_charts.push(init_chart($('#signal1'), {
+				labels: ['Signal 1'],
+				colors: ['#16a085'],
+				backgroundColors: ['#16a085'],
+				sample_size: size,
+				title: 'Signal 1 Trace',
+				scale_type: 'linear'
+			}));
 
-			fft_chart = init_chart($('#fft'), {
-				labels: ['Signal 1', 'Signal 2'],
-				colors: ['#16a085', '#2980b9'],
-				backgroundColors: ['#16a085', '#2980b9'],
-				sample_size: size
-			});
+			signal_charts.push(init_chart($('#signal2'), {
+				labels: ['Signal 2'],
+				colors: ['#2980b9'],
+				backgroundColors: ['#2980b9'],
+				sample_size: size,
+				title: 'Signal 2 Trace',
+				scale_type: 'linear'
+			}));
+
+			mag_charts.push(init_chart($('#fft-mag1'), {
+				labels: ['Signal 1'],
+				colors: ['#16a085'],
+				backgroundColors: ['#16a085'],
+				sample_size: size,
+				title: '\(X_1(j\omega)\)',
+				scale_type: 'linear'
+			}));
+
+			mag_charts.push(init_chart($('#fft-mag2'), {
+				labels: ['Signal 2'],
+				colors: ['#2980b9'],
+				backgroundColors: ['#2980b9'],
+				sample_size: size,
+				title: 'Magintude Plot',
+				scale_type: 'linear'
+			}));
+
+			phase_charts.push(init_chart($('#fft-phase1'), {
+				labels: ['Signal 1'],
+				colors: ['#16a085'],
+				backgroundColors: ['#16a085'],
+				sample_size: size,
+				title: 'Signal 1 Trace',
+				scale_type: 'linear'
+			}));
+
+			phase_charts.push(init_chart($('#fft-phase2'), {
+				labels: ['Signal 2'],
+				colors: ['#2980b9'],
+				backgroundColors: ['#2980b9'],
+				sample_size: size,
+				title: 'Magintude Plot',
+				scale_type: 'linear'
+			}));
 
 			sample_size = size;
 		});
 
 		// function to update chart
-		var update_chart = function(chart, data) {
-			var time_axis = new Array(sample_size);
+		var update_charts = function(charts, x, y) {
+
 			for (var i=0; i<sample_size; i++) {
-				time_axis[i] = (i/sample_size) * 10;
+				charts[0].data.datasets[0].data[i].x = x[i];
+				charts[1].data.datasets[0].data[i].x = x[i];
+
+				charts[0].data.datasets[0].data[i].y = y[0][i];
+				charts[1].data.datasets[0].data[i].y = y[1][i];
+
+
+				charts[0].update();
+				charts[1].update();
 			}
 
-			chart.data.datasets[0].data = data[0];
-			chart.data.datasets[1].data = data[1];
-			chart.data.labels = time_axis;
-
-			chart.update();
 		};
 
 		// poll for data update every 1s
@@ -80,16 +151,18 @@
 
 		// collect data from server
 		socket.on('signal', function(data) {
-			update_chart(signal_chart, [data.signal[0].signal, data.signal[1].signal]);
-			update_chart(fft_chart, [data.fft[0].signal, data.fft[1].signal]);
+			update_charts(signal_charts, data[0].signal.x, [data[0].signal.y, data[1].signal.y]);
+			update_charts(mag_charts, data[0].fft_mag.x, [data[0].fft_mag.y, data[1].fft_mag.y]);
+			update_charts(phase_charts, data[0].fft_phase.x, [data[0].fft_phase.y, data[1].fft_phase.y]);
 
-			update_stat('#maxValue', data.signal[0].max, data.signal[0].d_max)
-			update_stat('#minValue', data.signal[0].min, data.signal[0].d_min)
-			update_stat('#avgValue', data.signal[0].avg, data.signal[0].d_avg)
+			update_stat('#maxValue', data[0].signal.max, 0)
+			update_stat('#minValue', data[0].signal.min, 0)
+			update_stat('#avgValue', data[0].signal.avg, 0)
 
-			update_stat('#maxValue2', data.signal[1].max, data.signal[1].d_max)
-			update_stat('#minValue2', data.signal[1].min, data.signal[1].d_min)
-			update_stat('#avgValue2', data.signal[1].avg, data.signal[1].d_avg)
+			update_stat('#maxValue2', data[2].signal.max, 0)
+			update_stat('#minValue2', data[2].signal.min, 0)
+			update_stat('#avgValue2', data[2].signal.avg, 0)
+
 		});
 
 		// function to update statitics
@@ -135,6 +208,9 @@
 		function round(value, decimals) {
 			return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
 		}
+
+		// smooth scrolling
+		smoothScroll.init();
 
 	});
 })(jQuery);
