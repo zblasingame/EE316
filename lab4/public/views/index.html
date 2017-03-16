@@ -27,152 +27,264 @@
   </head>
   <body>
 
-		<div id="wrapper">
-			<div id="sidebar-wrapper">
-				<ul class="sidebar-nav">
-					<a data-scroll href="#stat1"><li class="sidebar-brand">HOME</li></a>
-					<li class="line"></li>
-					<!-- <li class="option"><span class="fa fa-area-chart"></span> \(x(t)\) Signal</li> -->
-					<a data-scroll href="#signal1"><li class="option">\(x_1(t),\; x_2(t)\)</li></a>
-					<a data-scroll href="#fft-mag1"><li class="option">\(|X_1(j\omega)|,\; |X_2(j\omega)|\)</li></a>
-					<a data-scroll href="#fft-phase1"><li class="option">\(\angle X_1(j\omega),\; \angle X_2(j\omega)\)</li></a>
-				</ul>
-			</div>
+		<!-- navbar -->
+		<header class="header">
+			<nav class="navbar navbar-custom" role="navigation">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#custom-collapse">
+							<span class="sr-only">Toggle Navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" data-scroll href="#">HOME</a>
+					</div>
 
-			<div id="page-content-wrapper">
-				<!-- stats -->
-				<div class="container-fluid">
-					<div id="stat1" class="row">
-						<div class="col-lg-4 col-md-6">
-							<div id="maxValue" class="stat-block view-animate">
-								<div class="trace">1</div>
-								<div class="heading">
-									<span class="fa fa-microchip"></span><span class="text"> Peak Voltage</span>
-								</div>
-								<div class="stat">
-									5 V
-								</div>
-								<div class="trend">
-									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
-								</div>
-							</div>
+					<div class="collapse navbar-collapse" id="custom-collapse">
+						<ul class="nav navbar-nav navbar-right">
+							<li><a data-scroll href="#stat1">\(x_1(t),\;x_2(t)\)</a></li>
+							<li><a data-scroll href="#stat2">\(|X_1(j\omega),\;X_2(j\omega)|\)</a></li>
+							<li><a data-scroll href="#fft-phase1">\(\angle X_1(j\omega),\;\angle X_2(j\omega)\)</a></li>
+							<li><a id="update" href="/" onclick="return false;">UPDATE</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</header>
+
+		<div class="container-fluid">
+			<!-- stats -->
+			<div id="stat1" class="row">
+				<div class="col-lg-4 col-md-6">
+					<div id="maxValue" class="stat-block view-animate">
+						<div class="trace">1</div>
+						<div class="heading">
+							<span class="fa fa-microchip"></span><span class="text"> Peak Voltage</span>
 						</div>
-						<div class="col-lg-4 col-md-6">
-							<div id="minValue" class="stat-block view-animate">
-								<div class="trace">1</div>
-								<div class="heading">
-									<span class="fa fa-microchip"></span><span class="text"> Min. Voltage</span>
-								</div>
-								<div class="stat">
-									5 V
-								</div>
-								<div class="trend">
-									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
-								</div>
-							</div>
+						<div class="stat">
+							5 V
 						</div>
-						<div class="col-lg-4 col-md-6">
-							<div id="avgValue" class="stat-block view-animate">
-								<div class="trace">1</div>
-								<div class="heading">
-									<span class="fa fa-microchip"></span><span class="text"> Avg. Voltage</span>
-								</div>
-								<div class="stat">
-									5 V
-								</div>
-								<div class="trend">
-									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4 col-md-6">
-							<div id="maxValue2" class="stat-block view-animate">
-								<div class="trace">2</div>
-								<div class="heading">
-									<span class="fa fa-microchip"></span><span class="text"> Peak Voltage</span>
-								</div>
-								<div class="stat">
-									5 V
-								</div>
-								<div class="trend">
-									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4 col-md-6">
-							<div id="minValue2" class="stat-block view-animate">
-								<div class="trace">2</div>
-								<div class="heading">
-									<span class="fa fa-microchip"></span><span class="text"> Min. Voltage</span>
-								</div>
-								<div class="stat">
-									5 V
-								</div>
-								<div class="trend">
-									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4 col-md-6">
-							<div id="avgValue2" class="stat-block view-animate">
-								<div class="trace">2</div>
-								<div class="heading">
-									<span class="fa fa-microchip"></span><span class="text"> Avg. Voltage</span>
-								</div>
-								<div class="stat">
-									5 V
-								</div>
-								<div class="trend">
-									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
-								</div>
-							</div>
+						<div class="trend">
+							<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
 						</div>
 					</div>
 				</div>
+				<div class="col-lg-4 col-md-6">
+					<div id="minValue" class="stat-block view-animate">
+						<div class="trace">1</div>
+						<div class="heading">
+							<span class="fa fa-microchip"></span><span class="text"> Min. Voltage</span>
+						</div>
+						<div class="stat">
+							5 V
+						</div>
+						<div class="trend">
+							<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-mxd-6">
+					<div id="avgValue" class="stat-block view-animate">
+						<div class="trace">1</div>
+						<div class="heading">
+							<span class="fa fa-microchip"></span><span class="text"> Avg. Voltage</span>
+						</div>
+						<div class="stat">
+							5 V
+						</div>
+						<div class="trend">
+							<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6">
+					<div id="maxValue2" class="stat-block view-animate">
+						<div class="trace">2</div>
+						<div class="heading">
+							<span class="fa fa-microchip"></span><span class="text"> Peak Voltage</span>
+						</div>
+						<div class="stat">
+							5 V
+						</div>
+						<div class="trend">
+							<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6">
+					<div id="minValue2" class="stat-block view-animate">
+						<div class="trace">2</div>
+						<div class="heading">
+							<span class="fa fa-microchip"></span><span class="text"> Min. Voltage</span>
+						</div>
+						<div class="stat">
+							5 V
+						</div>
+						<div class="trend">
+							<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6">
+					<div id="avgValue2" class="stat-block view-animate">
+						<div class="trace">2</div>
+						<div class="heading">
+							<span class="fa fa-microchip"></span><span class="text"> Avg. Voltage</span>
+						</div>
+						<div class="stat">
+							5 V
+						</div>
+						<div class="trend">
+							<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+						</div>
+					</div>
+				</div>
+			</div>
 
-				<!-- graphs -->
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-md-6">
-							<div class="block block-light">
-								<span class="chart-title">\(x_1(t)\)</span>
-								<canvas id="signal1" width="400" height="300"></canvas>
-							</div>
+			<!-- graphs -->
+			<div class="row">
+				<div class="col-md-6">
+					<div class="block block-light">
+						<span class="chart-title">\(x_1(t)\)</span>
+						<canvas id="signal1" width="400" height="300"></canvas>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="block block-light">
+						<span class="chart-title">\(x_2(t)\)</span>
+						<canvas id="signal2" width="400" height="300"></canvas>
+					</div>
+				</div>
+			</div>
+
+			<!-- more stats -->
+			<div id="stat2" class="row">
+				<div class="col-lg-4 col-md-6">
+					<div id="maxfft1" class="stat-block view-animate">
+						<div class="trace">1</div>
+						<div class="heading">
+							<span class="fa fa-desktop"></span><span class="text"> Max. Magnitude</span>
 						</div>
-						<div class="col-md-6">
-							<div class="block block-light">
-								<span class="chart-title">\(x_2(t)\)</span>
-								<canvas id="signal2" width="400" height="300"></canvas>
-							</div>
+						<div class="stat">
+						 20 dB
+						</div>
+						<div class="trend">
+							<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-md-6">
-							<div class="block block-light">
-								<span class="chart-title">\(|X_1(j\omega)|\)</span>
-								<canvas id="fft-mag1" width="400" height="300"></canvas>
-							</div>
+				</div>
+				<div class="col-lg-4 col-md-6">
+					<div id="maxfreq1" class="stat-block view-animate">
+						<div class="trace">1</div>
+						<div class="heading">
+							<span class="fa fa-desktop"></span><span class="text"> Frequency of Max. Magnitude</span>
 						</div>
-						<div class="col-md-6">
-							<div class="block block-light">
-								<span class="chart-title">\(|X_2(j\omega)|\)</span>
-								<canvas id="fft-mag2" width="400" height="300"></canvas>
-							</div>
+						<div class="stat">
+							500 Hz
+						</div>
+						<div class="trend">
+							<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-md-6">
-							<div class="block block-light">
-								<span class="chart-title">\(\angle X_1(j\omega)\)</span>
-								<canvas id="fft-phase1" width="400" height="300"></canvas>
-							</div>
+				</div>
+				<div class="col-lg-4 col-md-6">
+					<div id="avgfft1" class="stat-block view-animate">
+						<div class="trace">1</div>
+						<div class="heading">
+							<span class="fa fa-desktop"></span><span class="text"> Avg. Magnitude</span>
 						</div>
-						<div class="col-md-6">
-							<div class="block block-light">
-								<span class="chart-title">\(\angle X_2(j\omega)\)</span>
-								<canvas id="fft-phase2" width="400" height="300"></canvas>
-							</div>
+						<div class="stat">
+							5 dB
 						</div>
+						<div class="trend">
+							<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6">
+					<div id="maxfft2" class="stat-block view-animate">
+						<div class="trace">2</div>
+						<div class="heading">
+							<span class="fa fa-desktop"></span><span class="text"> Max. Magnitude</span>
+						</div>
+						<div class="stat">
+						 20 dB
+						</div>
+						<div class="trend">
+							<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6">
+					<div id="maxfreq2" class="stat-block view-animate">
+						<div class="trace">2</div>
+						<div class="heading">
+							<span class="fa fa-desktop"></span><span class="text"> Frequency of Max. Magnitude</span>
+						</div>
+						<div class="stat">
+							500 Hz
+						</div>
+						<div class="trend">
+							<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6">
+					<div id="avgfft2" class="stat-block view-animate">
+						<div class="trace">2</div>
+						<div class="heading">
+							<span class="fa fa-desktop"></span><span class="text"> Avg. Magnitude</span>
+						</div>
+						<div class="stat">
+							5 dB
+						</div>
+						<div class="trend">
+							<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- graphs -->
+			<div class="row">
+				<div class="col-md-6">
+					<div class="block block-light">
+						<span class="chart-title">\(|X_1(j\omega)|\)</span>
+						<canvas id="fft-mag1" width="400" height="300"></canvas>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="block block-light">
+						<span class="chart-title">\(|X_2(j\omega)|\)</span>
+						<canvas id="fft-mag2" width="400" height="300"></canvas>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="block block-light">
+						<span class="chart-title">\(|X_1(j\omega)|\; \forall \omega > 0\)</span>
+						<canvas id="fft-log1" width="400" height="300"></canvas>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="block block-light">
+						<span class="chart-title">\(|X_2(j\omega)|\; \forall \omega > 0\)</span>
+						<canvas id="fft-log2" width="400" height="300"></canvas>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="block block-light">
+						<span class="chart-title">\(\angle X_1(j\omega)\)</span>
+						<canvas id="fft-phase1" width="400" height="300"></canvas>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="block block-light">
+						<span class="chart-title">\(\angle X_2(j\omega)\)</span>
+						<canvas id="fft-phase2" width="400" height="300"></canvas>
 					</div>
 				</div>
 			</div>
@@ -184,8 +296,10 @@
 		<script src="/scripts/bootstrap.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/scripts/Chart.min.js"></script>
+		<script src="/scripts/hammer.min.js"></script>
 		<script src="/scripts/chartjs-plugin-zoom.min.js"></script>
 		<script src="/scripts/smooth-scroll.min.js"></script>
+		<script src="/scripts/sticky.js"></script>
 		<script src="https://use.fontawesome.com/fab590fe69.js"></script>
 		<script src="/scripts/client.js"></script>
   </body>

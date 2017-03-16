@@ -6,6 +6,7 @@
     "chart.js": "^2.5.0",
     "chartjs-plugin-zoom": "^0.4.5",
     "express": "^4.15.2",
+    "node-bluetooth": "^1.1.0",
     "socket.io": "^1.7.3"
   },
   "devDependencies": {
@@ -13,6 +14,7 @@
     "eslint": "^3.17.1",
     "eslint-config-google": "^0.7.1",
     "fft.js": "^4.0.1",
+    "hammerjs": "^2.0.8",
     "serialport": "^4.0.7",
     "smooth-scroll": "github:cferdinandi/smooth-scroll"
   }

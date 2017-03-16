@@ -9,7 +9,7 @@
 			var coords = [];
 
 			for (var j=0; j<options.sample_size; j++) {
-				coords.push({x: j, y: i });
+				coords.push({x: 0, y: 0});
 			}
 
 			for (var i=0; i<options.labels.length; i++) {
@@ -39,24 +39,31 @@
 					datasets: datasets
 				},
 				options: {
-					pan: {
-						enabled: true,
-						mode: 'x'
-					},
-					zoom: {
-						enabled: true,
-						mode: 'x'
-					},
-					title: {
-						display: false,
-						text: options.title,
-						fontFamily: 'Raleway',
-						fontSize: 24
+					// pan: {
+					// 	enabled: true,
+					// 	mode: 'xy'
+					// },
+					// zoom: {
+					// 	enabled: true,
+					// 	mode: 'xy'
+					// },
+					legend: {
+						display: false
 					},
 					scales: {
 						xAxes: [{
 							type: options.scale_type,
-							position: 'bottom'
+							position: 'bottom',
+							scaleLabel: {
+								display: true,
+								labelString: options.xlabel
+							}
+						}],
+						yAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: options.ylabel
+							}
 						}]
 					}
 				}
@@ -68,6 +75,7 @@
 		var signal_charts = [];
 		var mag_charts = [];
 		var phase_charts = [];
+		var log_charts = [];
 
 		socket.on('sample_size', function(size) {
 			signal_charts.push(init_chart($('#signal1'), {
@@ -75,8 +83,9 @@
 				colors: ['#16a085'],
 				backgroundColors: ['#16a085'],
 				sample_size: size,
-				title: 'Signal 1 Trace',
-				scale_type: 'linear'
+				scale_type: 'linear',
+				xlabel: 'Time (s)',
+				ylabel: 'Voltage (V)'
 			}));
 
 			signal_charts.push(init_chart($('#signal2'), {
@@ -84,8 +93,9 @@
 				colors: ['#2980b9'],
 				backgroundColors: ['#2980b9'],
 				sample_size: size,
-				title: 'Signal 2 Trace',
-				scale_type: 'linear'
+				scale_type: 'linear',
+				xlabel: 'Time (s)',
+				ylabel: 'Voltage (V)'
 			}));
 
 			mag_charts.push(init_chart($('#fft-mag1'), {
@@ -93,8 +103,9 @@
 				colors: ['#16a085'],
 				backgroundColors: ['#16a085'],
 				sample_size: size,
-				title: '\(X_1(j\omega)\)',
-				scale_type: 'linear'
+				scale_type: 'linear',
+				xlabel: 'Frequency (Hz)',
+				ylabel: 'Magnitude (dB)'
 			}));
 
 			mag_charts.push(init_chart($('#fft-mag2'), {
@@ -102,8 +113,29 @@
 				colors: ['#2980b9'],
 				backgroundColors: ['#2980b9'],
 				sample_size: size,
-				title: 'Magintude Plot',
-				scale_type: 'linear'
+				scale_type: 'linear',
+				xlabel: 'Frequency (Hz)',
+				ylabel: 'Magnitude (dB)'
+			}));
+
+			log_charts.push(init_chart($('#fft-log1'), {
+				labels: ['Signal 1'],
+				colors: ['#16a085'],
+				backgroundColors: ['#16a085'],
+				sample_size: size/2-1,
+				scale_type: 'logarithmic',
+				xlabel: 'Frequency (Hz)',
+				ylabel: 'Magnitude (dB)'
+			}));
+
+			log_charts.push(init_chart($('#fft-log2'), {
+				labels: ['Signal 2'],
+				colors: ['#2980b9'],
+				backgroundColors: ['#2980b9'],
+				sample_size: size/2-1,
+				scale_type: 'logarithmic',
+				xlabel: 'Frequency (Hz)',
+				ylabel: 'Magnitude (dB)'
 			}));
 
 			phase_charts.push(init_chart($('#fft-phase1'), {
@@ -111,8 +143,9 @@
 				colors: ['#16a085'],
 				backgroundColors: ['#16a085'],
 				sample_size: size,
-				title: 'Signal 1 Trace',
-				scale_type: 'linear'
+				scale_type: 'linear',
+				xlabel: 'Frequency (Hz)',
+				ylabel: 'Angle (rad)'
 			}));
 
 			phase_charts.push(init_chart($('#fft-phase2'), {
@@ -120,23 +153,24 @@
 				colors: ['#2980b9'],
 				backgroundColors: ['#2980b9'],
 				sample_size: size,
-				title: 'Magintude Plot',
-				scale_type: 'linear'
+				scale_type: 'linear',
+				xlabel: 'Frequency (Hz)',
+				ylabel: 'Angle (rad)'
 			}));
+
+			socket.emit('update_data');
 
 			sample_size = size;
 		});
 
 		// function to update chart
 		var update_charts = function(charts, x, y) {
-
-			for (var i=0; i<sample_size; i++) {
+			for (var i=0; i<x.length; i++) {
 				charts[0].data.datasets[0].data[i].x = x[i];
 				charts[1].data.datasets[0].data[i].x = x[i];
 
 				charts[0].data.datasets[0].data[i].y = y[0][i];
 				charts[1].data.datasets[0].data[i].y = y[1][i];
-
 
 				charts[0].update();
 				charts[1].update();
@@ -145,32 +179,47 @@
 		};
 
 		// poll for data update every 1s
-		setInterval(function() {
+		// setInterval(function() {
+		// 	socket.emit('update_data');
+		// }, 5000);
+
+		// listen for user request to capture
+		$('#update').on('click', function() {
 			socket.emit('update_data');
-		}, 5000);
+		});
 
 		// collect data from server
 		socket.on('signal', function(data) {
 			update_charts(signal_charts, data[0].signal.x, [data[0].signal.y, data[1].signal.y]);
 			update_charts(mag_charts, data[0].fft_mag.x, [data[0].fft_mag.y, data[1].fft_mag.y]);
 			update_charts(phase_charts, data[0].fft_phase.x, [data[0].fft_phase.y, data[1].fft_phase.y]);
+			update_charts(log_charts, data[0].fft_log.x, [data[0].fft_log.y, data[1].fft_log.y]);
 
-			update_stat('#maxValue', data[0].signal.max, 0)
-			update_stat('#minValue', data[0].signal.min, 0)
-			update_stat('#avgValue', data[0].signal.avg, 0)
+			update_stat('#maxValue', data[0].signal.max, data[0].signal.pmax, 'V');
+			update_stat('#minValue', data[0].signal.min, data[0].signal.pmin, 'V');
+			update_stat('#avgValue', data[0].signal.avg, data[0].signal.pavg, 'V');
 
-			update_stat('#maxValue2', data[2].signal.max, 0)
-			update_stat('#minValue2', data[2].signal.min, 0)
-			update_stat('#avgValue2', data[2].signal.avg, 0)
+			update_stat('#maxValue2', data[1].signal.max, data[1].signal.pmax, 'V');
+			update_stat('#minValue2', data[1].signal.min, data[1].signal.pmin, 'V');
+			update_stat('#avgValue2', data[1].signal.avg, data[1].signal.pavg, 'V');
+
+
+			update_stat('#maxfft1', data[0].fft_mag.max, data[0].fft_mag.pmax, 'dB');
+			update_stat('#maxfreq1', data[0].fft_mag.fmax, data[0].fft_mag.pfmax, 'Hz');
+			update_stat('#avgfft1', data[0].fft_mag.avg, data[0].fft_mag.pavg, 'dB');
+
+			update_stat('#maxfft2', data[1].fft_mag.max, data[1].fft_mag.pmax, 'dB');
+			update_stat('#maxfreq2', data[1].fft_mag.fmax, data[1].fft_mag.pfmax, 'Hz');
+			update_stat('#avgfft2', data[1].fft_mag.avg, data[1].fft_mag.pavg, 'dB');
 
 		});
 
 		// function to update statitics
-		var update_stat = function(id, data, delta) {
+		var update_stat = function(id, data, delta, unit) {
 			var stat = id + ' .stat';
 			var trend = id + ' .trend .arrow';
 			var arrow = id + ' .trend .fa';
-			$(stat).text(round(data, 2) + ' V');
+			$(stat).text(round(data, 2) + ' ' + unit);
 			$(trend).text(Math.abs(round(delta, 2)) + '%');
 			// code to change colors for percent sign
 			if (delta > 0) {
@@ -211,6 +260,11 @@
 
 		// smooth scrolling
 		smoothScroll.init();
+
+		// navbar
+		$('.header').sticky({
+			topSpacing: 0
+		});
 
 	});
 })(jQuery);

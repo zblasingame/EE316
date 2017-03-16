@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Data Viewer</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/styles/bootstrap.min.css">
+
+		<!-- stylesheet -->
+		<link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/styles/style.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+		<!-- MathJax -->
+		<script type="text/javascript" async
+			src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+		</script>
+  </head>
+  <body>
+
+		<div id="wrapper">
+			<div id="sidebar-wrapper">
+				<ul class="sidebar-nav">
+					<a data-scroll href="#stat1"><li class="sidebar-brand">HOME</li></a>
+					<li class="line"></li>
+					<!-- <li class="option"><span class="fa fa-area-chart"></span> \(x(t)\) Signal</li> -->
+					<a data-scroll href="#signal1"><li class="option">\(x_1(t),\; x_2(t)\)</li></a>
+					<a data-scroll href="#fft-mag1"><li class="option">\(|X_1(j\omega)|,\; |X_2(j\omega)|\)</li></a>
+					<a data-scroll href="#fft-phase1"><li class="option">\(\angle X_1(j\omega),\; \angle X_2(j\omega)\)</li></a>
+				</ul>
+			</div>
+
+			<div id="page-content-wrapper">
+				<!-- stats -->
+				<div class="container-fluid">
+					<div id="stat1" class="row">
+						<div class="col-lg-4 col-md-6">
+							<div id="maxValue" class="stat-block view-animate">
+								<div class="trace">1</div>
+								<div class="heading">
+									<span class="fa fa-microchip"></span><span class="text"> Peak Voltage</span>
+								</div>
+								<div class="stat">
+									5 V
+								</div>
+								<div class="trend">
+									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6">
+							<div id="minValue" class="stat-block view-animate">
+								<div class="trace">1</div>
+								<div class="heading">
+									<span class="fa fa-microchip"></span><span class="text"> Min. Voltage</span>
+								</div>
+								<div class="stat">
+									5 V
+								</div>
+								<div class="trend">
+									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6">
+							<div id="avgValue" class="stat-block view-animate">
+								<div class="trace">1</div>
+								<div class="heading">
+									<span class="fa fa-microchip"></span><span class="text"> Avg. Voltage</span>
+								</div>
+								<div class="stat">
+									5 V
+								</div>
+								<div class="trend">
+									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6">
+							<div id="maxValue2" class="stat-block view-animate">
+								<div class="trace">2</div>
+								<div class="heading">
+									<span class="fa fa-microchip"></span><span class="text"> Peak Voltage</span>
+								</div>
+								<div class="stat">
+									5 V
+								</div>
+								<div class="trend">
+									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6">
+							<div id="minValue2" class="stat-block view-animate">
+								<div class="trace">2</div>
+								<div class="heading">
+									<span class="fa fa-microchip"></span><span class="text"> Min. Voltage</span>
+								</div>
+								<div class="stat">
+									5 V
+								</div>
+								<div class="trend">
+									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6">
+							<div id="avgValue2" class="stat-block view-animate">
+								<div class="trace">2</div>
+								<div class="heading">
+									<span class="fa fa-microchip"></span><span class="text"> Avg. Voltage</span>
+								</div>
+								<div class="stat">
+									5 V
+								</div>
+								<div class="trend">
+									<span class="fa fa-caret-up"></span><span class="arrow up">5%</span> From last time
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- graphs -->
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="block block-light">
+								<span class="chart-title">\(x_1(t)\)</span>
+								<canvas id="signal1" width="400" height="300"></canvas>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="block block-light">
+								<span class="chart-title">\(x_2(t)\)</span>
+								<canvas id="signal2" width="400" height="300"></canvas>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="block block-light">
+								<span class="chart-title">\(|X_1(j\omega)|\)</span>
+								<canvas id="fft-mag1" width="400" height="300"></canvas>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="block block-light">
+								<span class="chart-title">\(|X_2(j\omega)|\)</span>
+								<canvas id="fft-mag2" width="400" height="300"></canvas>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="block block-light">
+								<span class="chart-title">\(\angle X_1(j\omega)\)</span>
+								<canvas id="fft-phase1" width="400" height="300"></canvas>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="block block-light">
+								<span class="chart-title">\(\angle X_2(j\omega)\)</span>
+								<canvas id="fft-phase2" width="400" height="300"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="/scripts/bootstrap.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="/scripts/Chart.min.js"></script>
+		<script src="/scripts/hammer.min.js"></script>
+		<script src="/scripts/chartjs-plugin-zoom.min.js"></script>
+		<script src="/scripts/smooth-scroll.min.js"></script>
+		<script src="https://use.fontawesome.com/fab590fe69.js"></script>
+		<script src="/scripts/client.js"></script>
+  </body>
+</html>
