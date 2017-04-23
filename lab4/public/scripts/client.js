@@ -12,6 +12,9 @@
 				coords.push({x: 0, y: 0});
 			}
 
+			pointRadius = options.pointRadius === undefined ? 1 : pointRadius;
+			// pointRadius = 1;
+
 			for (var i=0; i<options.labels.length; i++) {
 				datasets.push({
 					label: options.labels[i],
@@ -105,7 +108,8 @@
 				sample_size: size,
 				scale_type: 'linear',
 				xlabel: 'Frequency (Hz)',
-				ylabel: 'Magnitude (dB)'
+				ylabel: 'Magnitude (dB)',
+				pointRadius: 5
 			}));
 
 			mag_charts.push(init_chart($('#fft-mag2'), {

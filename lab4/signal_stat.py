@@ -68,7 +68,8 @@ def get_fft(signal):
 
 
 def _float(f):
-    return round(float(f), 2)
+    # make sure -inf or +inf doesnt crash the server
+    return round(float(f), 2) if np.isfinite(f) else 0
 
 
 signal = np.array(json.loads(args.signal))
@@ -81,11 +82,15 @@ data = get_fft(signal)
 old = get_fft(_old)
 
 mag = data['full_mag']
+mag[np.isinf(mag)] = 0
 phase = data['angle']
+phase[np.isinf(phase)] = 0
 t = data['t']
 freqs = data['freqs']
 lmag = data['half_mag']
+lmag[np.isinf(lmag)] = 0
 lfreqs = data['log_freqs']
+lfreqs[np.isinf(lfreqs)] = 0
 
 data = {
     'signal': {

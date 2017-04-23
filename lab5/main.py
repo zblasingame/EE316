@@ -7,20 +7,9 @@ Class:      EE 316
 import pygame
 import serial
 import random
-import numpy as np
 import threading
-import time
 import sys
 import os
-
-
-# function to reject outliers
-def reject_outliers(data, m=1):
-    if len(data) == 1:
-        return data
-
-    data = np.array(data)
-    return data[np.absolute(data - np.mean(data)) < m * np.std(data) + 1]
 
 
 # connect to serial
@@ -49,7 +38,7 @@ xs = []
 ys = []
 
 color = (0, 0, 0)
-width = 5
+width = 1
 size = 1
 byte_buffer = ''
 character_buffer = ''
@@ -72,8 +61,9 @@ draw_screen_2x['rect'].center = (400, 300)
 
 # function to manage threads
 def collect_data():
-    global ser, can_draw_point
+    global ser
     global _x, _y, x, y
+    global color, width, size
 
     while True:
         data_byte = ser.read()
@@ -85,7 +75,7 @@ def collect_data():
             y = ser.read()[0]
 
             pygame.draw.line(draw_screen['surface'], color, [_x, _y],
-                             [x, y], 1)
+                             [x, y], width)
 
         elif data_byte == b'E':
             print('Erase')
@@ -95,16 +85,27 @@ def collect_data():
             print('Screen')
             os.system('scrot -u capture.png')
 
+        elif data_byte == b'C':
+            print('Updated Settings')
+            r = ser.read()[0]
+            g = ser.read()[0]
+            b = ser.read()[0]
+            color = (r, g, b)
+
+            bits = '{0:08b}'.format(ser.read()[0])
+            size = int(bits[0:4], 2)
+            width = int(bits[5:9], 2)
+            if width < 1:
+                width = 1
+            elif width > 7:
+                width = 7
+
 
 thread = threading.Thread(target=collect_data)
 thread.start()
 
-start_collection = time.time()
-end_collection = time.time()
-
-
 # fonts
-font = pygame.font.Font('/usr/share/fonts/TTF/SourceCodePro-Regular.ttf', 28)
+font = pygame.font.Font('/usr/share/fonts/TTF/SourceCodePro-Regular.ttf', 20)
 
 disp_texts = []
 for i in range(3):
@@ -133,59 +134,6 @@ while True:
             if event.key == pygame.K_q:
                 sys.exit()
 
-    # Read serial data
-    # end_collection = time.time()
-
-    # if end_collection - start_collection > 0.01:
-    #     data_byte = ser.read()
-
-    #     if data_byte == b'D':
-    #         xs.append(ser.read()[0])
-    #         ys.append(ser.read()[0])
-
-    #         _x = x
-    #         _y = y
-    #         x = np.average(reject_outliers(xs))
-    #         y = np.average(reject_outliers(ys))
-    #         xs = []
-    #         ys = []
-
-    #         can_draw_point = True
-
-    #     elif data_byte == b'E':
-    #         print('Erase')
-    #         draw_screen['surface'].fill((255, 255, 255))
-
-    #     elif data_byte == b'S':
-    #         print('Screen')
-    #         os.system('scrot -u capture.png')
-
-    #     start_collection = time.time()
-
-    # Process serial data buffer
-    # i = 0
-    # print(byte_buffer)
-    # while i < len(byte_buffer) - 2:
-    #     if byte_buffer[i] == 68:
-    #         _x = x
-    #         _y = y
-    #         x = byte_buffer[i+1]
-    #         y = byte_buffer[i+2]
-    #         i += 2
-
-    #         pygame.draw.line(draw_screen['surface'], color, [_x, _y],
-    #                          [x, y], 1)
-
-    #     elif byte_buffer[i] == 69:
-    #         print('Erase')
-    #         draw_screen['surface'].fill((255, 255, 255))
-
-    #     elif byte_buffer[i] == 83:
-    #         print('Screen')
-    #         os.system('scrot -u capture.png')
-
-    #     i += 1
-
     # update text
     disp_texts[0]['surface'] = font.render(disp_str[0].format(
         'Blah'
@@ -197,7 +145,7 @@ while True:
     disp_texts[2]['surface'] = font.render(disp_str[2].format(
         256 if size == 1 else 512,
         color,
-        1
+        width
     ), 1, (255, 255, 255))
 
     # draw to screen
